@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "pretty": true,
+        "inlineSourceMap":true
+    },
+    "include": [
+        "src/**/**.ts",
+        "test/**/**.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

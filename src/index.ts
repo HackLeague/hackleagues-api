@@ -1,0 +1,85 @@
+import * as path from 'path';
+import * as Express from 'express';
+import { ApolloOptions } from 'graphql-server';
+import { makeExecutableSchema } from 'graphql-tools';
+import { graphqlExpress, graphiqlExpress, ExpressGraphQLOptionsFunction } from 'graphql-server-express';
+import * as bodyParser from 'body-parser';
+
+
+let PORT:number = 3010;
+if (process.env.PORT) {
+  PORT = parseInt(process.env.PORT, 10) + 100;
+}
+const app:Express.Application = Express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+const graphqlSchema = `
+  type User {
+    username: String,
+    password: String
+  }
+  type Query {
+    getUserByUsername(username: String!): User
+  }
+  type Mutation {
+    createUser(email: String!): User
+  }
+  schema {
+    query: Query
+    mutation: Mutation
+  }
+`;
+const createResolvers = (models) => ({
+  Query: {
+    getUserByUsername(root, { id }) {
+      return {
+          username: 'barry3',
+          password: 'rowValue1',
+        }
+    },
+  },
+  Mutation: {
+     createUser(root, args) {
+      return {
+          username: 'barry2',
+          password: 'rowValue1',
+        };
+    },
+  },
+});
+const schema = makeExecutableSchema({
+  typeDefs: [graphqlSchema],
+  resolvers: createResolvers(null),
+});
+
+const graphQLOtions:ExpressGraphQLOptionsFunction = (req: Express.Request) :ApolloOptions => {
+
+  const query = req.query.query || req.body.query;
+  console.log("Query GraphQl ", query);
+  if (query && query.length > 2000) {
+
+    throw new Error('Query too large.');
+  }
+
+  const response: ApolloOptions = {
+    schema,
+    context: {
+
+    },
+  };
+  return response;
+};
+
+app.use('/graphql', graphqlExpress(graphQLOtions));
+
+app.use('/graphiql', graphiqlExpress({
+  endpointURL: '/graphql',
+  query: `
+`,
+}));
+
+app.listen(PORT, () => console.log( // eslint-disable-line no-console
+  `API Server is now running on http://localhost:${PORT}`
+));
+
