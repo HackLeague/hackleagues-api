@@ -2,8 +2,8 @@ import * as Knex from 'knex';
 
 export  function seed (knex:Knex, Promise:any) {
   // Deletes ALL existing entries
-  return knex('users').del()
-    .then(function () {
+  // return knex('users').del()
+  //   .then(function () {
       return Promise.all([
         // Inserts seed entries
         knex('users').insert({
@@ -19,5 +19,5 @@ export  function seed (knex:Knex, Promise:any) {
           username: 'barry3',
         }),
       ]);
-    });
+    // });
 };
