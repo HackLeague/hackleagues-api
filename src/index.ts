@@ -16,30 +16,34 @@ app.use(bodyParser.json());
 
 const graphqlSchema = `
   type User {
-    id:ID!,
-    email:String!,
-    verifyEmailToken:String!,
-    username: String,
-    roles: [Role],
-    created_at:String,
+    id:ID!
+    email:String!
+    verifyEmailToken:String!
+    username:String
+    roles: [Role]
+    created_at:String
     updated_at:String
   }
 
   type Role{
+    name:String
   }
   type AuthenticationToken{
     token:String!
   }
-
+  type HttpResponse{
+    message:String
+    statusCode:Int
+  }
   type Query {
-    me(): User,
+    me: User
     getUserByEmail(email: String!): User
   }
 
   type Mutation {
-    login(email: String!),
-    verifyEmail(email: String!, token:String!): AuthenticationToken,
-    logout(token:String!)
+    login(email: String!): HttpResponse
+    verifyEmail(email: String!, token:String!): AuthenticationToken
+    logout(token:String!): HttpResponse
   }
   schema {
     query: Query
@@ -48,7 +52,7 @@ const graphqlSchema = `
 `;
 const createResolvers = (models) => ({
   Query: {
-    me(){
+     me(){
       return {
         username: 'barr3',
         email: 'hello',
@@ -63,10 +67,8 @@ const createResolvers = (models) => ({
   },
   Mutation: {
     login(root, args) {
-
     },
     verifyEmail() {
-
     },
     logout() {
 
