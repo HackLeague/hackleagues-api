@@ -48,20 +48,29 @@ const graphqlSchema = `
 `;
 const createResolvers = (models) => ({
   Query: {
-    getUserByUsername(root, { id }) {
+    me(){
+      return {
+        username: 'barr3',
+        email: 'hello',
+      }
+    },
+    getUserByEmail(root, { id }) {
       return {
         username: 'barry3',
-        password: 'rowValue1',
+        email: 'rowValue1',
       }
     },
   },
   Mutation: {
-    createUser(root, args) {
-      return {
-        username: 'barry2',
-        password: 'rowValue1',
-      };
+    login(root, args) {
+
     },
+    verifyEmail() {
+
+    },
+    logout() {
+      
+    }
   },
 });
 const schema = makeExecutableSchema({
