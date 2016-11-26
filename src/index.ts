@@ -6,24 +6,40 @@ import { graphqlExpress, graphiqlExpress, ExpressGraphQLOptionsFunction } from '
 import * as bodyParser from 'body-parser';
 
 
-let PORT:number = 3010;
+let PORT: number = 3010;
 if (process.env.PORT) {
   PORT = parseInt(process.env.PORT, 10) + 100;
 }
-const app:Express.Application = Express();
+const app: Express.Application = Express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const graphqlSchema = `
   type User {
+    id:ID!,
+    email:String!,
+    verifyEmailToken:String!,
     username: String,
-    password: String
+    roles: [Role],
+    created_at:String,
+    updated_at:String
   }
+
+  type Role{
+  }
+  type AuthenticationToken{
+    token:String!
+  }
+
   type Query {
-    getUserByUsername(username: String!): User
+    me(): User,
+    getUserByEmail(email: String!): User
   }
+
   type Mutation {
-    createUser(email: String!): User
+    login(email: String!),
+    verifyEmail(email: String!, token:String!): AuthenticationToken,
+    logout(token:String!)
   }
   schema {
     query: Query
@@ -34,17 +50,17 @@ const createResolvers = (models) => ({
   Query: {
     getUserByUsername(root, { id }) {
       return {
-          username: 'barry3',
-          password: 'rowValue1',
-        }
+        username: 'barry3',
+        password: 'rowValue1',
+      }
     },
   },
   Mutation: {
-     createUser(root, args) {
+    createUser(root, args) {
       return {
-          username: 'barry2',
-          password: 'rowValue1',
-        };
+        username: 'barry2',
+        password: 'rowValue1',
+      };
     },
   },
 });
@@ -53,7 +69,7 @@ const schema = makeExecutableSchema({
   resolvers: createResolvers(null),
 });
 
-const graphQLOtions:ExpressGraphQLOptionsFunction = (req: Express.Request) :ApolloOptions => {
+const graphQLOtions: ExpressGraphQLOptionsFunction = (req: Express.Request): ApolloOptions => {
 
   const query = req.query.query || req.body.query;
   console.log("Query GraphQl ", query);
