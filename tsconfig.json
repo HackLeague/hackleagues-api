@@ -7,10 +7,12 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "pretty": true,
-        "inlineSourceMap":true
+        "inlineSourceMap":true,
+        "skipLibCheck": true
     },
     "include": [
         "src/**/**.ts",
+        "db/**/**.ts",
         "test/**/**.ts"
     ],
     "exclude": [
