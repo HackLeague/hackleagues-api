@@ -69,7 +69,7 @@ const createResolvers = (models) => ({
 
     },
     logout() {
-      
+
     }
   },
 });
@@ -100,8 +100,7 @@ app.use('/graphql', graphqlExpress(graphQLOtions));
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
-  query: `
-`,
+  query: ``,
 }));
 
 app.listen(PORT, () => console.log( // eslint-disable-line no-console
